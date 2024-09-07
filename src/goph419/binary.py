@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def bin_add_4(a, b):
     """Add two four bit binary numbers.
     Most significant bit first.
@@ -93,3 +96,27 @@ def floor_div_2(a):
     res = [0 for _ in range(len(a))]
     res[1:] = a[:-1]
     return res
+
+
+def dec2bin(s):
+    """Convert string of decimal digits to binary.
+
+    Inputs
+    ------
+    s : str
+        String of decimal digits.
+
+    Returns
+    -------
+    str
+        String of binary digits.
+    """
+    rem = dec2bin_array(str(s))
+    bin = []
+    while np.any(rem):
+        bin.append(rem[-1][-1])
+        add = [_dec2bin["5"] if x[-1] else _dec2bin["0"] for x in rem[:-1]]
+        rem = [floor_div_2(x) for x in rem]
+        rem[1:] = [bin_add_4(r, a) for r, a in zip(rem[1:], add)]
+    bin.reverse()
+    return "0b" + "".join(str(b) for b in bin)

@@ -3,12 +3,13 @@ from goph419.binary import (
     bin_value,
     dec2bin_array,
     floor_div_2,
+    dec2bin,
 )
 
 
 def main():
-    a = [1, 1, 1, 1]
-    b = [0, 0, 0, 1]
+    a = [0, 1, 1, 1]
+    b = [0, 1, 0, 1]
     print(f"  {a}: {bin_value(a)}")
     print(f"+ {b}: {bin_value(b)}")
 
@@ -27,7 +28,15 @@ def main():
         s = str(k)
         d = dec2bin_array(s)[0]
         d_2 = floor_div_2(d)
-        print(f"{k} // 2 = {d_2}")
+        v = bin_value(d_2)
+        print(f"{k} // 2 = {d_2} = {v} = {dec2bin(v)}")
+
+    print()
+
+    s = 1042
+    b = dec2bin(s)
+    d = bin(s)
+    print(f"{s} -> {dec2bin(s)} -> {d}")
 
 
 if __name__ == "__main__":
