@@ -37,6 +37,7 @@ def main():
     b = dec2bin(s)
     d = bin(s)
     print(f"{s} -> {dec2bin(s)} -> {d}")
+    print(b == d)
 
 
 if __name__ == "__main__":
