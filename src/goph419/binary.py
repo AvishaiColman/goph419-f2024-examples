@@ -18,3 +18,36 @@ def bin_add_4(a, b):
             res[k] ^= add[k]
             add[k] = add[k + 1] & res[k + 1] if k < 3 else 0
     return res
+
+
+def bin_value(a):
+    """Return the value of a list of bits.
+    Most significant bit first.
+
+    Inputs
+    ------
+    a : iterable of bool
+
+    Returns
+    -------
+    int
+    """
+    val = 0
+    dig = 2 ** (len(a) - 1)
+    for x in a:
+        val += bool(x) * dig
+        dig //= 2
+    return val
+
+
+def get_dec2bin_dict():
+    """Populate a dict with binary representations
+    of decimal digits.
+    """
+    bin = [0, 0, 0, 0]
+    one = [0, 0, 0, 1]
+    dec2bin = dict()
+    for k in range(10):
+        dec2bin[str(k)] = bin
+        bin = bin_add_4(bin, one)
+    return dec2bin
