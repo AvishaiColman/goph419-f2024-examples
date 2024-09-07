@@ -1,7 +1,7 @@
 from goph419.binary import (
     bin_add_4,
     bin_value,
-    get_dec2bin_dict,
+    dec2bin_array,
 )
 
 
@@ -15,8 +15,10 @@ def main():
     print(f"= {c}: {bin_value(c)}")
     print(f"      expected: {(bin_value(a) + bin_value(b)) % 16}")
 
-    dec2bin = get_dec2bin_dict()
-    print(dec2bin)
+    print()
+
+    d = "42"
+    print(f"{d}:\n{dec2bin_array(d)}")
 
 
 if __name__ == "__main__":

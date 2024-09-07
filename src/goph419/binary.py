@@ -51,3 +51,22 @@ def get_dec2bin_dict():
         dec2bin[str(k)] = bin
         bin = bin_add_4(bin, one)
     return dec2bin
+
+
+_dec2bin = get_dec2bin_dict()
+
+
+def dec2bin_array(s):
+    """Initialize array of binary representations
+    from a string of decimal digits.
+
+    Inputs
+    ------
+    s : str
+        String of decimal digits.
+
+    Returns
+    -------
+    list[list[bool]]
+    """
+    return [_dec2bin[x] for x in s]
