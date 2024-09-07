@@ -1,5 +1,5 @@
 from goph419.binary import (
-    bin_add_4,
+    bin_add,
     bin_value,
     dec2bin_array,
     floor_div_2,
@@ -8,14 +8,14 @@ from goph419.binary import (
 
 
 def main():
-    a = [0, 1, 1, 1]
-    b = [0, 1, 0, 1]
+    a = [1, 0, 1, 1, 1]
+    b = [0, 0, 1, 0, 1]
     print(f"  {a}: {bin_value(a)}")
     print(f"+ {b}: {bin_value(b)}")
 
-    c = bin_add_4(a, b)
+    c = bin_add(a, b)
     print(f"= {c}: {bin_value(c)}")
-    print(f"      expected: {(bin_value(a) + bin_value(b)) % 16}")
+    print(f"      expected: {(bin_value(a) + bin_value(b)) % (2 ** len(a))}")
 
     print()
 

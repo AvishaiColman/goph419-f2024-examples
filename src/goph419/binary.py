@@ -1,8 +1,8 @@
 import numpy as np
 
 
-def bin_add_4(a, b):
-    """Add two four bit binary numbers.
+def bin_add(a, b):
+    """Add two binary numbers.
     Most significant bit first.
 
     Inputs
@@ -14,12 +14,16 @@ def bin_add_4(a, b):
     -------
     list[bool]
     """
+    k_max = len(a)
+    k_last = k_max - 1
+    if k_max != len(b):
+        raise ValueError("a and b have different length")
     res = [int(bool(x)) for x in a]
     add = [int(bool(x)) for x in b]
-    for _ in range(4):
-        for k in range(4):
+    for _ in range(k_max):
+        for k in range(k_max):
             res[k] ^= add[k]
-            add[k] = add[k + 1] & res[k + 1] if k < 3 else 0
+            add[k] = add[k + 1] & res[k + 1] if k < k_last else 0
     return res
 
 
@@ -58,7 +62,7 @@ def get_dec2bin_dict():
     dec2bin = dict()
     for k in range(10):
         dec2bin[str(k)] = bin
-        bin = bin_add_4(bin, one)
+        bin = bin_add(bin, one)
     return dec2bin
 
 
@@ -117,6 +121,6 @@ def dec2bin(s):
         bin.append(rem[-1][-1])
         add = [_dec2bin["5"] if x[-1] else _dec2bin["0"] for x in rem[:-1]]
         rem = [floor_div_2(x) for x in rem]
-        rem[1:] = [bin_add_4(r, a) for r, a in zip(rem[1:], add)]
+        rem[1:] = [bin_add(r, a) for r, a in zip(rem[1:], add)]
     bin.reverse()
     return "0b" + "".join(str(b) for b in bin)
