@@ -1,21 +1,20 @@
 def bin_add_4(a, b):
     """Add two four bit binary numbers.
-    Least significant bit first.
+    Most significant bit first.
 
     Inputs
     ------
-    a : str
-    b : str
+    a : iterable of bool
+    b : iterable of bool
 
     Returns
     -------
-    str
+    list of bool
     """
-    res = [int(bool(int(x))) for x in a]
-    add = [int(bool(int(x))) for x in b]
-    tmp = [0 for _ in range(4)]
-    for _ in range(5):
-        tmp[1:] = [x & y for x, y in zip(res[:-1], add[:-1])]
-        res[:] = [x ^ y for x, y in zip(res, add)]
-        add = [x for x in tmp]
-    return "".join(str(x) for x in res)
+    res = [int(bool(x)) for x in a]
+    add = [int(bool(x)) for x in b]
+    for _ in range(4):
+        for k in range(4):
+            res[k] ^= add[k]
+            add[k] = add[k + 1] & res[k + 1] if k < 3 else 0
+    return res
