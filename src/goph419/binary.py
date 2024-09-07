@@ -4,12 +4,12 @@ def bin_add_4(a, b):
 
     Inputs
     ------
-    a : iterable of bool
-    b : iterable of bool
+    a : iterable[bool]
+    b : iterable[bool]
 
     Returns
     -------
-    list of bool
+    list[bool]
     """
     res = [int(bool(x)) for x in a]
     add = [int(bool(x)) for x in b]
@@ -26,7 +26,7 @@ def bin_value(a):
 
     Inputs
     ------
-    a : iterable of bool
+    a : iterable[bool]
 
     Returns
     -------
@@ -43,6 +43,12 @@ def bin_value(a):
 def get_dec2bin_dict():
     """Populate a dict with binary representations
     of decimal digits.
+
+    Returns
+    -------
+    dict
+        Keys are decimal digits (as single character strings)
+        and values are four bit lists of binary digits.
     """
     bin = [0, 0, 0, 0]
     one = [0, 0, 0, 1]
@@ -70,3 +76,20 @@ def dec2bin_array(s):
     list[list[bool]]
     """
     return [_dec2bin[x] for x in s]
+
+
+def floor_div_2(a):
+    """Floor divide a binary number by 2,
+    chopping fractional portion.
+
+    Inputs
+    ------
+    a : list[bool]
+
+    Returns
+    -------
+    list[bool]
+    """
+    res = [0 for _ in range(len(a))]
+    res[1:] = a[:-1]
+    return res
