@@ -1,3 +1,16 @@
+"""Example showing conversion of a decimal integer string
+into a binary representation. Uses functions that perform
+binary addition and binary division on base-10 digits
+represented in binary.
+
+Notes
+-----
+This example and the functions imported below
+were not discussed in class.
+It is extra and for your interest,
+and I will not ask about it on quizzes/exams.
+"""
+
 from goph419.binary import (
     bin_add,
     bin_value,
