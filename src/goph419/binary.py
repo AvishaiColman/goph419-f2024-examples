@@ -28,7 +28,7 @@ def bin_add(a, b):
 
 
 def bin_value(a):
-    """Return the value of a list of bits.
+    """Return the value of a list of bits representing an integer.
     Most significant bit first.
 
     Inputs
@@ -66,6 +66,9 @@ def get_dec2bin_dict():
     return dec2bin
 
 
+"""Dictionary of binary representations of decimal digits.
+(Private module variable).
+"""
 _dec2bin = get_dec2bin_dict()
 
 
