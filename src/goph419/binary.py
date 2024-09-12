@@ -1,6 +1,50 @@
 import numpy as np
 
 
+def binary_int32_big(x):
+    """Return binary string representing an unsigned 32-bit integer.
+    Big endian format (most significant bit first).
+
+    Inputs
+    ------
+    x : int
+
+    Returns
+    -------
+    str
+        String of binary digits in big endian format.
+    """
+    p = 31
+    d = []
+    while p >= 0:
+        d.append(1 if x >= 2**p else 0)
+        x -= d[-1] * 2**p
+        p -= 1
+    return "".join(str(b) for b in d)
+
+
+def binary_int32_lit(x):
+    """Return binary string representing an unsigned 32-bit integer.
+    Little endian format (least significant bit first).
+
+    Inputs
+    ------
+    x : int
+
+    Returns
+    -------
+    str
+        String of binary digits in little endian format.
+    """
+    p = 0
+    d = []
+    while p < 32:
+        d.append(x % 2)
+        x //= 2
+        p += 1
+    return "".join(str(b) for b in d)
+
+
 def bin_add(a, b):
     """Add two binary numbers.
     Most significant bit first.
