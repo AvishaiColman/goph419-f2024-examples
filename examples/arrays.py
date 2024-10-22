@@ -1,5 +1,7 @@
 import numpy as np
 
+from goph419.linalg import forward_substitution
+
 
 def main():
     A = np.array(
@@ -12,7 +14,9 @@ def main():
     print(f"b: {b}")
 
     x_np = np.linalg.solve(A, b)
+    x_for = forward_substitution(A, b)
     print(f"x_np: {x_np}")
+    print(f"x_for: {x_for}")
 
 
 if __name__ == "__main__":
