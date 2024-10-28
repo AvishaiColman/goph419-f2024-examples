@@ -3,6 +3,7 @@ import numpy as np
 from goph419.linalg import (
     forward_substitution,
     backward_substitution,
+    gauss_solve,
 )
 
 
@@ -32,9 +33,30 @@ def main():
     print(f"b: {b}")
 
     x_np = np.linalg.solve(A, b)
-    x_for = backward_substitution(A, b)
+    x_back = backward_substitution(A, b)
     print(f"x_np: {x_np}")
-    print(f"x_back: {x_for}")
+    print(f"x_back: {x_back}")
+
+    # testing a full rank non-triangular system
+    A = np.array(
+        [
+            [2.0, -1.0, 0.0, 0.0],
+            [-1.0, 2.0, -1.0, 0.0],
+            [0.0, -2.0, 3.0, -1.0],
+            [0.0, 0.0, -1.0, 1.0],
+        ]
+    )
+    b = np.array([[1.0, 2.0, 3.0, 4.0], [2.0, 4.0, 6.0, 8.0]]).T
+
+    print()
+    print("solving A * x = b with Gaussian elimination")
+    print(f"A: {A}")
+    print(f"b: {b}")
+
+    x_np = np.linalg.solve(A, b)
+    x_ge = gauss_solve(A, b)
+    print(f"x_np: {x_np}")
+    print(f"x_ge: {x_ge}")
 
 
 if __name__ == "__main__":
