@@ -133,7 +133,7 @@ def gauss_solve(a, b):
     Notes
     -----
     Assume that matrix a has full rank.
-    Using naive GE, we do not check for zeros in pivot positions.
+    Using GE with partial pivoting, i.e. row pivoting only.
     """
     # making a copy of the input arrays,
     # so that we do not overwrite their values
