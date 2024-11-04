@@ -161,10 +161,14 @@ def gauss_solve(a, b):
     # forward elimination algorithm
     for k, _ in enumerate(aug):
         kp1 = k + 1
-        # perform row pivoting
-        k_max = np.argwhere(np.abs(aug[k:, k]) == np.max(np.abs(aug[k:, k])))[0, 0]
-        if k_max:
-            aug[k, :], aug[k + k_max, :] = aug[k + k_max, :].copy(), aug[k, :].copy()
+        # perform row and column pivoting
+        k_row, k_col = np.argwhere(
+            np.abs(aug[k:, k:M]) == np.max(np.abs(aug[k:, k:M]))
+        )[0, :]
+        if k_row:
+            aug[k, :], aug[k + k_row, :] = aug[k + k_row, :].copy(), aug[k, :].copy()
+        if k_col:
+            aug[:, k], aug[:, k + k_col] = aug[:, k + k_col].copy(), aug[:, k].copy()
         # calculate elimination coefficients below the pivot
         aug[kp1:, k] /= aug[k, k]
         # subtract correction to eliminate below the pivot
