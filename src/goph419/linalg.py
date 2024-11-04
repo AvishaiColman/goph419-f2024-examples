@@ -160,11 +160,15 @@ def gauss_solve(a, b):
     aug = np.hstack([a, b])
     # forward elimination algorithm
     for k, _ in enumerate(aug):
+        kp1 = k + 1
+        # perform row pivoting
+        k_max = np.argwhere(np.abs(aug[k:, k]) == np.max(np.abs(aug[k:, k])))[0, 0]
+        if k_max:
+            aug[k, :], aug[k + k_max, :] = aug[k + k_max, :].copy(), aug[k, :].copy()
         # calculate elimination coefficients below the pivot
-        aug[(k + 1) :, k] /= aug[k, k]
+        aug[kp1:, k] /= aug[k, k]
         # subtract correction to eliminate below the pivot
-        for j in range(k + 1, M):
-            aug[j, (k + 1) :] -= aug[j, k] * aug[k, (k + 1) :]
+        aug[kp1:, kp1:] -= aug[kp1:, k:kp1] @ aug[k:kp1, kp1:]
     # perform backward substitution
     x = backward_substitution(aug[:, :M], aug[:, M:])
     # tidy up output shape
