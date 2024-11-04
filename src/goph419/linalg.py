@@ -158,6 +158,8 @@ def gauss_solve(a, b):
     b_one_d = len(b_shape) == 1
     # form the augmented matrix
     aug = np.hstack([a, b])
+    p_row = np.arange(M)  # for tracking row pivots
+    q_col = np.arange(M)  # for tracking column pivots
     # forward elimination algorithm
     for k, _ in enumerate(aug):
         kp1 = k + 1
@@ -166,16 +168,21 @@ def gauss_solve(a, b):
             np.abs(aug[k:, k:M]) == np.max(np.abs(aug[k:, k:M]))
         )[0, :]
         if k_row:
-            aug[k, :], aug[k + k_row, :] = aug[k + k_row, :].copy(), aug[k, :].copy()
+            swap = k + k_row
+            aug[(k, swap), :] = aug[(swap, k), :]
+            p_row[k], p_row[swap] = p_row[swap], p_row[k]
         if k_col:
-            aug[:, k], aug[:, k + k_col] = aug[:, k + k_col].copy(), aug[:, k].copy()
+            swap = k + k_col
+            aug[:, (k, swap)] = aug[:, (swap, k)]
+            q_col[k], q_col[swap] = q_col[swap], q_col[k]
         # calculate elimination coefficients below the pivot
         aug[kp1:, k] /= aug[k, k]
         # subtract correction to eliminate below the pivot
         aug[kp1:, kp1:] -= aug[kp1:, k:kp1] @ aug[k:kp1, kp1:]
     # perform backward substitution
     x = backward_substitution(aug[:, :M], aug[:, M:])
-    # tidy up output shape
+    # tidy up output
+    x = x[q_col, :]  # put output in correct order, after column pivots
     if b_one_d:
         x = x.flatten()
     return x
