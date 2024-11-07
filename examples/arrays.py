@@ -79,6 +79,30 @@ def main():
     print(f"lu: {lu}")
     print(f"pq: {pq}")
 
+    # testing lu factorization (with full output)
+    A = np.array(
+        [
+            [3.0, -1.0, 0.0, 0.0, 0.0, 0.0],
+            [-1.0, 2.0, -1.0, 0.0, 0.0, 0.0],
+            [0.0, -1.0, 3.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 3.0, -1.0, 0.0],
+            [0.0, 0.0, 0.0, -1.0, 2.0, -1.0],
+            [0.0, 0.0, 0.0, 0.0, -1.0, 3.0],
+        ]
+    )
+
+    print()
+    print("factorize A into p*A*q = l*u")
+    print(f"A:\n{A}")
+
+    lu, pq = lu_factor(A, full_output=True)
+    print(f"l:\n{lu[0]}")
+    print(f"u:\n{lu[1]}")
+    print(f"p:\n{pq[0]}")
+    print(f"q:\n{pq[1]}")
+    print(f"paq:\n{pq[0] @ A @ pq[1]}")
+    print(f"lu:\n{lu[0] @ lu[1]}")
+
 
 if __name__ == "__main__":
     main()

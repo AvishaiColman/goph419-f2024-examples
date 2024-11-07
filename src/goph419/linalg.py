@@ -188,7 +188,7 @@ def gauss_solve(a, b):
     return x
 
 
-def lu_factor(a, overwrite_a=False):
+def lu_factor(a, overwrite_a=False, full_output=False):
     """Factor a non-singular square matrix a
     into p, q, l, and u matrices such that p*a*q = l*u.
     Uses the Gaussian elimination algorithm with complete pivoting.
@@ -199,14 +199,16 @@ def lu_factor(a, overwrite_a=False):
         The coefficient matrix, must be full rank, det(a) != 0.
     overwrite_a : bool, default=False
         Flag for whether to overwrite a with the lu matrix.
+    full_output : bool, default=False
+        Flag for returning full l, u, p, and q arrays.
 
     Returns
     -------
-    lu : numpy.ndarray, shape=(M, M)
+    lu : numpy.ndarray, shape=(M, M) or tuple[numpy.array]
         The l and u matrices in compact storage,
         with l in the lower triangle (below main diagonal)
         and u in in the upper triangle (at and above main diagonal).
-    pq : numpy.ndarray, shape=(2, M)
+    pq : numpy.ndarray, shape=(2, M) or tuple[numpy.array]
         The p and q matrices in compact storage,
         with the first row containing row pivot vector p
         and the second row containing column pivot vector q.
@@ -224,6 +226,9 @@ def lu_factor(a, overwrite_a=False):
     in the order given by pq[0, :] to create p
     and create an identity matrix and rearrange columns
     in the order given by pq[1, :] to create q.
+    If full_output is set,
+    the above steps will be done for you,
+    and lu and pq will be tuples containing the full arrays.
     """
     # make a copy or rename the input array
     lu = a if overwrite_a else np.array(a, dtype="float64")
@@ -252,5 +257,17 @@ def lu_factor(a, overwrite_a=False):
         # eliminate below the pivot
         lu[kp1:, k] /= lu[k, k]
         lu[kp1:, kp1:] -= lu[kp1:, k:kp1] @ lu[k:kp1, kp1:]
-    # TODO: tidy up output
+    # tidy up output
+    if full_output:
+        i, j = np.meshgrid(np.arange(M), np.arange(M), indexing="ij")
+        l_mat = np.eye(M, dtype="float64")
+        l_mat[i > j] = lu[i > j]
+        u_mat = np.zeros_like(lu)
+        u_mat[i <= j] = lu[i <= j]
+        lu = (l_mat, u_mat)
+        p_mat = np.zeros((M, M), dtype="int")
+        q_mat = np.zeros((M, M), dtype="int")
+        p_mat[pq[0:1, :].T == j] = 1
+        q_mat[pq[1:2, :] == i] = 1
+        pq = (p_mat, q_mat)
     return lu, pq
