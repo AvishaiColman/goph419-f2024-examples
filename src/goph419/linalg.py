@@ -186,3 +186,71 @@ def gauss_solve(a, b):
     if b_one_d:
         x = x.flatten()
     return x
+
+
+def lu_factor(a, overwrite_a=False):
+    """Factor a non-singular square matrix a
+    into p, q, l, and u matrices such that p*a*q = l*u.
+    Uses the Gaussian elimination algorithm with complete pivoting.
+
+    Parameters
+    ----------
+    a : array_like, shape=(M, M)
+        The coefficient matrix, must be full rank, det(a) != 0.
+    overwrite_a : bool, default=False
+        Flag for whether to overwrite a with the lu matrix.
+
+    Returns
+    -------
+    lu : numpy.ndarray, shape=(M, M)
+        The l and u matrices in compact storage,
+        with l in the lower triangle (below main diagonal)
+        and u in in the upper triangle (at and above main diagonal).
+    pq : numpy.ndarray, shape=(2, M)
+        The p and q matrices in compact storage,
+        with the first row containing row pivot vector p
+        and the second row containing column pivot vector q.
+
+    Notes
+    -----
+    Assume that matrix a has full rank.
+    To separate the l and u matrices,
+    create an identity matrix and copy the values below
+    the main diagonal in lu to create l,
+    and create a matrix of zeros and copy the values at
+    and above the main diagonal in lu to create u.
+    To create the p and q matrices,
+    create an identity matrix and rearrange rows
+    in the order given by pq[0, :] to create p
+    and create an identity matrix and rearrange columns
+    in the order given by pq[1, :] to create q.
+    """
+    # make a copy or rename the input array
+    lu = a if overwrite_a else np.array(a, dtype="float64")
+    # check for valid input
+    shape = lu.shape
+    M = shape[0]
+    if len(shape) != 2:
+        raise ValueError(f"a has dimension {len(shape)}, should be 2.")
+    if M != shape[1]:
+        raise ValueError(f"a has shape {shape}, should be square.")
+    # initialize pivot array
+    pq = np.vstack([np.arange(M), np.arange(M)])
+    # forward elimination algorithm
+    for k, _ in enumerate(lu):
+        kp1 = k + 1
+        # perform row and column pivoting
+        row, col = np.argwhere(np.abs(lu[k:, k:]) == np.max(np.abs(lu[k:, k:])))[0, :]
+        if row:
+            swap = k + row
+            lu[(k, swap), :] = lu[(swap, k), :]
+            pq[0, k], pq[0, swap] = pq[0, swap], pq[0, k]
+        if col:
+            swap = k + col
+            lu[:, (k, swap)] = lu[:, (swap, k)]
+            pq[1, k], pq[1, swap] = pq[1, swap], pq[1, k]
+        # eliminate below the pivot
+        lu[kp1:, k] /= lu[k, k]
+        lu[kp1:, kp1:] -= lu[kp1:, k:kp1] @ lu[k:kp1, kp1:]
+    # TODO: tidy up output
+    return lu, pq

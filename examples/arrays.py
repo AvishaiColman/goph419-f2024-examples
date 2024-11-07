@@ -4,6 +4,7 @@ from goph419.linalg import (
     forward_substitution,
     backward_substitution,
     gauss_solve,
+    lu_factor,
 )
 
 
@@ -14,7 +15,7 @@ def main():
     )
     b = np.array([1.0, 2.0, 3.0, 4.0])
 
-    print("solving A * x = b with forward substitution")
+    print("solve A * x = b with forward substitution")
     print(f"A: {A}")
     print(f"b: {b}")
 
@@ -28,7 +29,7 @@ def main():
     b = np.array([[1.0, 2.0, 3.0, 4.0], [2.0, 4.0, 6.0, 8.0]]).T
 
     print()
-    print("solving A * x = b with backward substitution")
+    print("solve A * x = b with backward substitution")
     print(f"A: {A}")
     print(f"b: {b}")
 
@@ -49,7 +50,7 @@ def main():
     b = np.array([[1.0, 2.0, 3.0, 4.0], [2.0, 4.0, 6.0, 8.0]]).T
 
     print()
-    print("solving A * x = b with Gaussian elimination")
+    print("solve A * x = b with Gaussian elimination")
     print(f"A: {A}")
     print(f"b: {b}")
 
@@ -57,6 +58,26 @@ def main():
     x_ge = gauss_solve(A, b)
     print(f"x_np: {x_np}")
     print(f"x_ge: {x_ge}")
+
+    # testing lu factorization
+    A = np.array(
+        [
+            [3.0, -1.0, 0.0, 0.0, 0.0, 0.0],
+            [-1.0, 2.0, -1.0, 0.0, 0.0, 0.0],
+            [0.0, -1.0, 3.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 3.0, -1.0, 0.0],
+            [0.0, 0.0, 0.0, -1.0, 2.0, -1.0],
+            [0.0, 0.0, 0.0, 0.0, -1.0, 3.0],
+        ]
+    )
+
+    print()
+    print("factorize A into p*A*q = l*u")
+    print(f"A: {A}")
+
+    lu, pq = lu_factor(A)
+    print(f"lu: {lu}")
+    print(f"pq: {pq}")
 
 
 if __name__ == "__main__":
